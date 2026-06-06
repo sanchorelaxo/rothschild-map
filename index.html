@@ -224,8 +224,8 @@
             <h1>🏛️ House of Rothschild</h1>
             <p><strong>Genealogical Map</strong></p>
             <p>• Founder: Mayer Amschel (Top)</p>
-            <p>• Gen 2: The 5 Sons</p>
-            <p>• Gen 3-5: Descendants (Bottom)</p>
+            <p>• Gen 2: The 5 Sons (Frankfurt, Vienna, London, Naples, Paris)</p>
+            <p>• Gen 3-7: Descendants to Modern Era (Bottom)</p>
             <p style="margin-top: 10px; font-size: 0.7em;">Click node to select • Drag to rotate • Scroll to zoom</p>
         </div>
 
@@ -253,7 +253,11 @@
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #a9e34b;"></div>
-                <span>Contemporary (Gen 5+)</span>
+                <span>Great-Great-Grandchildren (Gen 5)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #339af0;"></div>
+                <span>Modern Era (Gen 6-7)</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #ff6b6b;"></div>
@@ -314,46 +318,64 @@
             gen3: 0x51cf66,
             gen4: 0xff8787,
             gen5: 0xa9e34b,
+            gen6: 0x339af0,
+            gen7: 0x339af0,
             intermarriage: 0xff6b6b
         };
 
         // Genealogical Data Structure
         // Y-axis represents generations: Founder (100), Gen2 (50), Gen3 (0), Gen4 (-50), Gen5 (-100)
-        const nodes = [
+                const nodes = [
             // Generation 1: Founder
             { id: 'mayer_amschel', name: 'Mayer Amschel Rothschild', gen: 1, y: 100, x: 0, z: 0, role: 'Founder of the Dynasty (1743-1812)', notes: 'Started as a rare coin dealer in Frankfurt. Established the family banking network. Married Gudule Schnapper in 1770.' },
             
             // Generation 2: The Five Sons
-            { id: 'amschel_mayer', name: 'Amschel Mayer', gen: 2, y: 50, x: -60, z: 0, role: 'Frankfurt Branch', notes: 'Born 1773. Married Eva Hanau. Remained in Frankfurt to manage the original house.' },
-            { id: 'salomon_mayer', name: 'Salomon Mayer', gen: 2, y: 50, x: -30, z: 40, role: 'Vienna Branch', notes: 'Born 1774. Married Caroline Stern. Established the Vienna branch, gained intimate access to Prince Metternich.' },
-            { id: 'nathan_mayer', name: 'Nathan Mayer', gen: 2, y: 50, x: 0, z: 60, role: 'London Branch', notes: 'Born 1777. Married Hannah Levi (Barnet Cohen) in 1806. The most financially astute of the brothers, established N M Rothschild & Sons.' },
-            { id: 'karl_mayer', name: 'Karl Mayer', gen: 2, y: 50, x: 30, z: 40, role: 'Naples Branch', notes: 'Born 1788. Married Adelaide Herz. Managed the Naples branch, crucial for Papal and Italian state finances.' },
-            { id: 'james_mayer', name: 'Jacob (James) Mayer', gen: 2, y: 50, x: 60, z: 0, role: 'Paris Branch', notes: 'Born 1792. Married his niece Betty (daughter of Salomon). Established Rothschild Frères in Paris.' },
+            { id: 'amschel_mayer', name: 'Amschel Mayer Rothschild', gen: 2, y: 50, x: -60, z: 0, role: 'Frankfurt Branch', notes: 'Born 1773. Married Eva Hanau. Remained in Frankfurt to manage the original house. Died without male heirs, passing the business to his nephews.' },
+            { id: 'salomon_mayer', name: 'Salomon Mayer von Rothschild', gen: 2, y: 50, x: -30, z: 40, role: 'Vienna Branch', notes: 'Born 1774. Married Caroline Stern. Established the Vienna branch, gained intimate access to Prince Metternich.' },
+            { id: 'nathan_mayer', name: 'Nathan Mayer Rothschild', gen: 2, y: 50, x: 0, z: 60, role: 'London Branch', notes: 'Born 1777. Married Hannah Levi (Barnet Cohen) in 1806. The most financially astute of the brothers, established N M Rothschild & Sons.' },
+            { id: 'karl_mayer', name: 'Carl Mayer von Rothschild', gen: 2, y: 50, x: 30, z: 40, role: 'Naples Branch', notes: 'Born 1788. Married Adelaide Herz. Managed the Naples branch, crucial for Papal and Italian state finances.' },
+            { id: 'james_mayer', name: 'James Mayer de Rothschild', gen: 2, y: 50, x: 60, z: 0, role: 'Paris Branch', notes: 'Born 1792. Married his niece Betty (daughter of Salomon). Established Rothschild Frères in Paris.' },
 
-            // Generation 3: Grandchildren (Selected prominent figures)
-            { id: 'anselm_salomon', name: 'Anselm Salomon', gen: 3, y: 0, x: -45, z: 20, role: 'Vienna/Frankfurt', notes: 'Son of Salomon. Married his cousin Charlotte (daughter of Nathan), exemplifying the family\'s strategy of endogamy.' },
-            { id: 'charlotte', name: 'Charlotte', gen: 3, y: 0, x: -15, z: 40, role: 'London/Vienna', notes: 'Daughter of Nathan Mayer. Married her cousin Anselm Salomon in 1824.' },
+            // Generation 3: Grandchildren
+            { id: 'anselm_salomon', name: 'Anselm Salomon von Rothschild', gen: 3, y: 0, x: -45, z: 20, role: 'Vienna/Frankfurt', notes: 'Son of Salomon. Married his cousin Charlotte (daughter of Nathan), exemplifying the family\'s strategy of endogamy.' },
+            { id: 'charlotte', name: 'Charlotte von Rothschild', gen: 3, y: 0, x: -15, z: 40, role: 'London/Vienna', notes: 'Daughter of Nathan Mayer. Married her cousin Anselm Salomon in 1824.' },
             { id: 'lionel', name: 'Lionel de Rothschild', gen: 3, y: 0, x: 0, z: 80, role: 'London Branch Head', notes: 'Son of Nathan. Financed the British government\'s purchase of Suez Canal shares. First practicing Jew to sit in the House of Commons (1858).' },
-            { id: 'anthony', name: 'Anthony de Rothschild', gen: 3, y: 0, x: -20, z: 80, role: 'London Branch', notes: 'Son of Nathan. Married Louisa Montefiore (niece of Sir Moses Montefiore), another strategic family alliance.' },
-            { id: 'mayer_carl', name: 'Mayer Carl', gen: 3, y: 0, x: 20, z: 60, role: 'Frankfurt Branch', notes: 'Son of Karl. Married his cousin Louise, daughter of Mayer Amschel (son of Amschel Mayer).' },
-            { id: 'alphonse', name: 'Alphonse James', gen: 3, y: 0, x: 60, z: 20, role: 'Paris Branch Head', notes: 'Eldest son of James. Married his cousin Leonora (daughter of Lionel), continuing the intermarriage tradition.' },
-            { id: 'gustave', name: 'Gustave de Rothschild', gen: 3, y: 0, x: 80, z: 0, role: 'Paris Branch', notes: 'Son of James. Married Cécile Anspach.' },
+            { id: 'anthony', name: 'Sir Anthony de Rothschild', gen: 3, y: 0, x: -20, z: 80, role: 'London Branch', notes: 'Son of Nathan. Married Louisa Montefiore (niece of Sir Moses Montefiore), another strategic family alliance.' },
+            { id: 'nathaniel_gen3', name: 'Nathaniel de Rothschild', gen: 3, y: 0, x: 20, z: 80, role: 'London/French Branch', notes: 'Son of Nathan. Married Charlotte de Rothschild. Established the French wine estate Château Mouton Rothschild.' },
+            { id: 'mayer_carl', name: 'Mayer Carl von Rothschild', gen: 3, y: 0, x: 20, z: 60, role: 'Frankfurt Branch', notes: 'Son of Carl. Married his cousin Louise, daughter of Amschel Mayer, keeping the Frankfurt line alive.' },
+            { id: 'wilhelm_carl', name: 'Wilhelm Carl von Rothschild', gen: 3, y: 0, x: 40, z: 60, role: 'Naples/Frankfurt Branch', notes: 'Son of Carl. Married Adelheid Herz. Later moved to Frankfurt to manage the family\'s remaining interests there.' },
+            { id: 'alphonse', name: 'Alphonse James de Rothschild', gen: 3, y: 0, x: 60, z: 20, role: 'Paris Branch Head', notes: 'Eldest son of James. Married his cousin Leonora (daughter of Lionel), continuing the intermarriage tradition.' },
+            { id: 'gustave', name: 'Gustave de Rothschild', gen: 3, y: 0, x: 80, z: 0, role: 'Paris Branch', notes: 'Son of James. Married Cécile Anspach. Managed the family\'s railway and mining investments.' },
+            { id: 'edmond', name: 'Edmond James de Rothschild', gen: 3, y: 0, x: 70, z: -20, role: 'Paris Branch / Zionism', notes: 'Youngest son of James. Known as "the Benefactor," he heavily funded early Zionist agricultural settlements in Palestine.' },
 
             // Generation 4: Great-Grandchildren
-            { id: 'edmond', name: 'Baron Edmond', gen: 4, y: -50, x: 50, z: 30, role: 'Paris Branch / Zionism', notes: 'Son of James. Known as "the Benefactor," he heavily funded early Zionist agricultural settlements in Palestine (Rishon LeZion, Zikhron Ya\'akov).' },
-            { id: 'edouard', name: 'Édouard Alphonse', gen: 4, y: -50, x: 70, z: 10, role: 'Paris Branch', notes: 'Son of Alphonse. Led the French house into the 20th century.' },
-            { id: 'nathaniel', name: 'Nathaniel (Natty)', gen: 4, y: -50, x: 0, z: 100, role: 'London Branch', notes: 'Son of Lionel. First Jewish peer to take his seat in the House of Lords (1885).' },
-            { id: 'ferdinand', name: 'Ferdinand', gen: 4, y: -50, x: -30, z: 10, role: 'Vienna Branch', notes: 'Son of Anselm Salomon. Expanded Austrian industrial investments, including railways and mining.' },
+            { id: 'albert', name: 'Albert Salomon Anselm von Rothschild', gen: 4, y: -50, x: -45, z: 10, role: 'Vienna Branch Head', notes: 'Son of Anselm Salomon. Expanded Austrian industrial investments, including railways and mining. Built the Palais Albert Rothschild.' },
+            { id: 'ferdinand', name: 'Ferdinand James von Rothschild', gen: 4, y: -50, x: -30, z: 30, role: 'Vienna/English Branch', notes: 'Son of Anselm Salomon. Moved to England, built Waddesdon Manor, and was a prominent art collector and politician.' },
+            { id: 'nathaniel_gen4', name: 'Nathaniel Rothschild, 1st Baron Rothschild', gen: 4, y: -50, x: 0, z: 100, role: 'London Branch Head', notes: 'Son of Lionel. First Jewish peer to take his seat in the House of Lords (1885).' },
+            { id: 'alfred', name: 'Alfred de Rothschild', gen: 4, y: -50, x: -20, z: 100, role: 'London Branch', notes: 'Son of Lionel. Director of the Bank of England, art collector, and host of lavish parties at Halton House.' },
+            { id: 'leopold', name: 'Leopold de Rothschild', gen: 4, y: -50, x: 20, z: 100, role: 'London Branch', notes: 'Son of Lionel. Philanthropist and racehorse owner. Managed the family\'s agricultural estates.' },
+            { id: 'edouard', name: 'Édouard Alphonse James de Rothschild', gen: 4, y: -50, x: 60, z: 10, role: 'Paris Branch Head', notes: 'Son of Alphonse. Led the French house into the 20th century. Father of Maurice and Robert.' },
+            { id: 'beatrice', name: 'Béatrice Ephrussi de Rothschild', gen: 4, y: -50, x: 80, z: -10, role: 'Paris Branch', notes: 'Daughter of Alphonse. Famous art collector who built the Villa Ephrussi de Rothschild on the French Riviera.' },
+            { id: 'maurice', name: 'Maurice de Rothschild', gen: 4, y: -50, x: 70, z: -30, role: 'Paris Branch', notes: 'Son of Edmond James. Politician and banker, continued his father\'s support for Zionist causes.' },
 
-            // Generation 5+: Contemporary / Modern Era
-            { id: 'victor', name: 'Victor Rothschild', gen: 5, y: -100, x: 0, z: 120, role: 'London Branch', notes: '3rd Baron Rothschild. Scientist, intelligence officer (MI5), and advisor to multiple Prime Ministers.' },
-            { id: 'edmond_adolphe', name: 'Edmond Adolphe', gen: 5, y: -100, x: 60, z: 40, role: 'Paris Branch', notes: 'Led the French banking operations post-WWII, restructured the family\'s wine and financial holdings.' },
-            { id: 'jacob_nathaniel', name: 'Jacob Nathaniel', gen: 5, y: -100, x: 80, z: 20, role: 'London Branch', notes: '4th Baron Rothschild. Financier and prominent figure in modern British Jewish life.' },
-            { id: 'david_rene', name: 'David René', gen: 5, y: -100, x: 70, z: 0, role: 'Paris Branch', notes: 'Chairman of Rothschild & Cie Banque, representing the contemporary French branch.' }
+            // Generation 5: Great-Great-Grandchildren
+            { id: 'louis', name: 'Louis Nathaniel von Rothschild', gen: 5, y: -100, x: -45, z: 0, role: 'Vienna Branch', notes: 'Son of Albert. The last head of the Austrian branch. Forced to flee after the 1938 Anschluss, losing the family\'s vast Austrian assets.' },
+            { id: 'charles', name: 'Charles Rothschild', gen: 5, y: -100, x: 10, z: 110, role: 'London Branch', notes: 'Son of Nathan Mayer (1st Baron). Entomologist and banker. Founded the Palestine Exploration Fund.' },
+            { id: 'edmund', name: 'Edmund Leopold de Rothschild', gen: 5, y: -100, x: 20, z: 120, role: 'London Branch', notes: 'Son of Leopold. Served in WWII and later managed the family\'s private investments and art collections.' },
+            { id: 'victor', name: 'Victor Rothschild, 3rd Baron Rothschild', gen: 5, y: -100, x: 0, z: 130, role: 'London Branch', notes: 'Son of Charles. Scientist, intelligence officer (MI5), and advisor to multiple Prime Ministers.' },
+            { id: 'edmond_adolphe', name: 'Edmond Adolphe de Rothschild', gen: 5, y: -100, x: 60, z: 0, role: 'Paris Branch', notes: 'Son of Maurice. Led the French banking operations post-WWII, restructured the family\'s wine and financial holdings.' },
+
+            // Generation 6+: Contemporary
+            { id: 'jacob', name: 'Jacob Rothschild, 4th Baron Rothschild', gen: 6, y: -150, x: 0, z: 140, role: 'London Branch', notes: 'Son of Victor. Financier and prominent figure in modern British Jewish life. Founded RIT Capital Partners.' },
+            { id: 'nathaniel_gen6', name: 'Nathaniel Rothschild, 5th Baron Rothschild', gen: 6, y: -150, x: 10, z: 150, role: 'London Branch', notes: 'Son of Jacob. Financier and co-founder of JNR Limited. Current head of the English branch.' },
+            { id: 'david_rene', name: 'David René de Rothschild', gen: 6, y: -150, x: 50, z: -10, role: 'Paris Branch', notes: 'Son of Edmond Adolphe. Chairman of Rothschild & Cie Banque, representing the contemporary French branch.' },
+            { id: 'benjamin', name: 'Benjamin de Rothschild', gen: 6, y: -150, x: 70, z: -20, role: 'Geneva/Paris Branch', notes: 'Son of Edmond Adolphe. Founded the Edmond de Rothschild Group, focusing on private banking and asset management.' },
+            { id: 'ariane', name: 'Ariane de Rothschild', gen: 6, y: -150, x: 80, z: -30, role: 'Geneva/Paris Branch', notes: 'Daughter of Edmond Adolphe. Widow of Benjamin, now chairs the Edmond de Rothschild Group.' },
+            { id: 'alexandre', name: 'Alexandre de Rothschild', gen: 7, y: -200, x: 50, z: -20, role: 'Paris Branch', notes: 'Son of David René. Current Chairman of Rothschild & Cie Banque, representing the newest generation of the French branch.' }
         ];
 
         // Connections (Parent-Child and Intermarriages)
-        const links = [
+                const links = [
             // Founder to Gen 2
             { source: 'mayer_amschel', target: 'amschel_mayer', type: 'parent-child' },
             { source: 'mayer_amschel', target: 'salomon_mayer', type: 'parent-child' },
@@ -366,26 +388,42 @@
             { source: 'nathan_mayer', target: 'charlotte', type: 'parent-child' },
             { source: 'nathan_mayer', target: 'lionel', type: 'parent-child' },
             { source: 'nathan_mayer', target: 'anthony', type: 'parent-child' },
+            { source: 'nathan_mayer', target: 'nathaniel_gen3', type: 'parent-child' },
             { source: 'karl_mayer', target: 'mayer_carl', type: 'parent-child' },
+            { source: 'karl_mayer', target: 'wilhelm_carl', type: 'parent-child' },
             { source: 'james_mayer', target: 'alphonse', type: 'parent-child' },
             { source: 'james_mayer', target: 'gustave', type: 'parent-child' },
+            { source: 'james_mayer', target: 'edmond', type: 'parent-child' },
 
             // Gen 3 to Gen 4
-            { source: 'james_mayer', target: 'edmond', type: 'parent-child' },
-            { source: 'alphonse', target: 'edouard', type: 'parent-child' },
-            { source: 'lionel', target: 'nathaniel', type: 'parent-child' },
+            { source: 'anselm_salomon', target: 'albert', type: 'parent-child' },
             { source: 'anselm_salomon', target: 'ferdinand', type: 'parent-child' },
+            { source: 'lionel', target: 'nathaniel_gen4', type: 'parent-child' },
+            { source: 'lionel', target: 'alfred', type: 'parent-child' },
+            { source: 'lionel', target: 'leopold', type: 'parent-child' },
+            { source: 'alphonse', target: 'edouard', type: 'parent-child' },
+            { source: 'alphonse', target: 'beatrice', type: 'parent-child' },
+            { source: 'edmond', target: 'maurice', type: 'parent-child' },
 
             // Gen 4 to Gen 5
-            { source: 'nathaniel', target: 'victor', type: 'parent-child' },
-            { source: 'edouard', target: 'edmond_adolphe', type: 'parent-child' },
-            { source: 'nathaniel', target: 'jacob_nathaniel', type: 'parent-child' },
-            { source: 'edmond_adolphe', target: 'david_rene', type: 'parent-child' },
+            { source: 'albert', target: 'louis', type: 'parent-child' },
+            { source: 'nathaniel_gen4', target: 'charles', type: 'parent-child' },
+            { source: 'leopold', target: 'edmund', type: 'parent-child' },
+            { source: 'charles', target: 'victor', type: 'parent-child' },
+            { source: 'maurice', target: 'edmond_adolphe', type: 'parent-child' },
 
-            // Intermarriages (The "renowned incest" / endogamy links)
-            { source: 'anselm_salomon', target: 'charlotte', type: 'intermarriage', label: 'Married (Cousins)' },
+            // Gen 5 to Gen 6+
+            { source: 'victor', target: 'jacob', type: 'parent-child' },
+            { source: 'jacob', target: 'nathaniel_gen6', type: 'parent-child' },
+            { source: 'edmond_adolphe', target: 'david_rene', type: 'parent-child' },
+            { source: 'edmond_adolphe', target: 'benjamin', type: 'parent-child' },
+            { source: 'edmond_adolphe', target: 'ariane', type: 'parent-child' },
+            { source: 'david_rene', target: 'alexandre', type: 'parent-child' },
+
+            // Intermarriages (Endogamy)
+            { source: 'anselm_salomon', target: 'charlotte', type: 'intermarriage', label: 'Married (First Cousins)' },
             { source: 'alphonse', target: 'lionel', targetNote: 'Married Leonora (Lionel\'s daughter)', type: 'intermarriage', label: 'Married (Uncle/Niece by marriage)' },
-            { source: 'mayer_carl', target: 'amschel_mayer', targetNote: 'Married Louise (Amschel\'s daughter)', type: 'intermarriage', label: 'Married (Cousins)' },
+            { source: 'mayer_carl', target: 'amschel_mayer', targetNote: 'Married Louise (Amschel\'s daughter)', type: 'intermarriage', label: 'Married (First Cousins)' },
             { source: 'anthony', target: 'nathan_mayer', targetNote: 'Married Louisa Montefiore (Nathan\'s niece)', type: 'intermarriage', label: 'Married (Strategic Alliance)' },
             { source: 'james_mayer', target: 'salomon_mayer', targetNote: 'Married Betty (Salomon\'s daughter)', type: 'intermarriage', label: 'Married (Uncle/Niece)' }
         ];
@@ -394,7 +432,7 @@
         nodes.forEach(n => nodeMap[n.id] = n);
 
 
-        const headshotImages = {
+                const headshotImages = {
             'mayer_amschel': 'mayer_amschel_rothschild.jpg',
             'amschel_mayer': 'placeholder.jpg',
             'salomon_mayer': 'salomon_mayer_von_rothschild.jpg',
@@ -405,17 +443,31 @@
             'charlotte': 'charlotte_von_rothschild.jpg',
             'lionel': 'lionel_de_rothschild.jpg',
             'anthony': 'placeholder.jpg',
+            'nathaniel_gen3': 'nathaniel_de_rothschild.jpg',
             'mayer_carl': 'mayer_carl_von_rothschild.jpg',
+            'wilhelm_carl': 'wilhelm_carl_von_rothschild.jpg',
             'alphonse': 'alphonse_james_de_rothschild.jpg',
             'gustave': 'gustave_de_rothschild.jpg',
             'edmond': 'edmond_james_de_rothschild.jpg',
-            'edouard': 'édouard_alphonse_james_de_rothschild.jpg',
-            'nathaniel': 'nathaniel_de_rothschild.jpg',
+            'albert': 'albert_salomon_anselm_von_rothschild.jpg',
             'ferdinand': 'ferdinand_de_rothschild.jpg',
+            'nathaniel_gen4': 'placeholder.jpg',
+            'alfred': 'alfred_de_rothschild.jpg',
+            'leopold': 'leopold_de_rothschild.jpg',
+            'edouard': 'édouard_alphonse_james_de_rothschild.jpg',
+            'beatrice': 'béatrice_ephrussi_de_rothschild.jpg',
+            'maurice': 'maurice_de_rothschild.jpg',
+            'louis': 'placeholder.jpg',
+            'charles': 'placeholder.jpg',
+            'edmund': 'placeholder.jpg',
             'victor': 'placeholder.jpg',
             'edmond_adolphe': 'edmond_adolphe_de_rothschild.jpg',
-            'jacob_nathaniel': 'jacob_rothschild_4th_baron_rothschild.jpg',
-            'david_rene': 'david_rené_de_rothschild.jpg'
+            'jacob': 'jacob_rothschild_4th_baron_rothschild.jpg',
+            'nathaniel_gen6': 'nathaniel_rothschild_5th_baron_rothschild.jpg',
+            'david_rene': 'david_rené_de_rothschild.jpg',
+            'benjamin': 'placeholder.jpg',
+            'ariane': 'ariane_de_rothschild.jpg',
+            'alexandre': 'placeholder.jpg'
         };
 
 
