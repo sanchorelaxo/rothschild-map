@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The House of Rothschild - Genealogical Map</title>
+    <style>
+        body {
+            margin: 0;
+            overflow-x: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+        }
+        #canvas-container {
+            height: 70vh;
+            position: relative;
+        }
+        #notes-panel {
+            height: 30vh;
+            background: #1a1a1a;
+            border-top: 2px solid #333;
+            padding: 20px;
+            overflow-y: auto;
+            color: white;
+            position: relative;
+        }
+        #headshot-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 200px;
+            max-height: 250px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #d4af37;
+            border-radius: 8px;
+            padding: 10px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        .headshot-img {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            border: 1px solid #666;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            display: block;
+            object-fit: contain;
+        }
+        .headshot-img:hover {
+            opacity: 0.8;
+        }
+        .headshot-caption {
+            font-size: 0.7em;
+            color: #aaa;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        #image-modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            justify-content: center;
+            align-items: center;
+        }
+        #image-modal.active {
+            display: flex;
+        }
+        #modal-image {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.5);
+        }
+        #image-modal-close {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        #image-modal-close:hover {
+            color: #d4af37;
+        }
+        #notes-content {
+            margin-right: 220px;
+        }
+        #notes-panel h2 {
+            margin: 0 0 10px 0;
+            color: #d4af37;
+        }
+        #notes-panel p {
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+        #notes-panel .connection {
+            background: rgba(212, 175, 55, 0.2);
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border-left: 3px solid #d4af37;
+        }
+        #notes-panel .connection .node-link {
+            color: #d4af37;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        #notes-panel .connection .node-link:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+        #info {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            background: rgba(0,0,0,0.8);
+            padding: 12px;
+            border-radius: 6px;
+            max-width: 250px;
+            z-index: 100;
+        }
+        #info h1 {
+            margin: 0 0 8px 0;
+            font-size: 1.2em;
+            color: #d4af37;
+        }
+        #info p {
+            margin: 3px 0;
+            font-size: 0.75em;
+            opacity: 0.8;
+        }
+        #tooltip {
+            position: absolute;
+            padding: 10px;
+            background: rgba(0,0,0,0.9);
+            color: white;
+            border-radius: 5px;
+            pointer-events: none;
+            display: none;
+            z-index: 1000;
+            font-size: 14px;
+            max-width: 200px;
+            border: 1px solid #d4af37;
+        }
+        .relationship-label {
+            color: #d4af37;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 8px;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 4px;
+            border: 1px solid #d4af37;
+            white-space: nowrap;
+            pointer-events: none;
+            text-align: center;
+            display: none;
+        }
+        .legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            padding: 15px;
+            border-radius: 8px;
+            color: white;
+            font-size: 12px;
+        }
+        .legend-item {
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+        }
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.8);
+            padding: 8px;
+            border-radius: 6px;
+            color: white;
+            display: flex;
+            gap: 8px;
+        }
+        button {
+            background: #d4af37;
+            border: none;
+            color: #000;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75em;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        button:hover {
+            background: #f4cf57;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container">
+        <div id="info">
+            <h1>🏛️ House of Rothschild</h1>
+            <p><strong>Genealogical Map</strong></p>
+            <p>• Founder: Mayer Amschel (Top)</p>
+            <p>• Gen 2: The 5 Sons</p>
+            <p>• Gen 3-5: Descendants (Bottom)</p>
+            <p style="margin-top: 10px; font-size: 0.7em;">Click node to select • Drag to rotate • Scroll to zoom</p>
+        </div>
+
+        <div id="controls">
+            <button onclick="resetCamera()">Reset View</button>
+            <button onclick="toggleRotation()">Toggle Rotation</button>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: #d4af37;"></div>
+                <span>Founder (Gen 1)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #4c6ef5;"></div>
+                <span>The Five Sons (Gen 2)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #51cf66;"></div>
+                <span>Grandchildren (Gen 3)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ff8787;"></div>
+                <span>Great-Grandchildren (Gen 4)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #a9e34b;"></div>
+                <span>Contemporary (Gen 5+)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ff6b6b;"></div>
+                <span>Intermarriage Link</span>
+            </div>
+        </div>
+
+        <div id="tooltip"></div>
+    </div>
+
+    <div id="notes-panel">
+        <div id="headshot-container" style="display: none;"></div>
+        <div id="notes-content">
+            <h2>Family Member Information</h2>
+            <p>Click on a node to see detailed genealogical information and connections. Click empty space to deselect.</p>
+        </div>
+    </div>
+
+    <div id="image-modal" onclick="closeImageModal()">
+        <span id="image-modal-close">&times;</span>
+        <img id="modal-image" src="" alt="" onclick="event.stopPropagation()">
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/renderers/CSS2DRenderer.js"></script>
+    
+    <script>
+        // Scene setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0a0a0a);
+        scene.fog = new THREE.Fog(0x0a0a0a, 200, 600);
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 20, 200);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const container = document.getElementById('canvas-container');
+        renderer.setSize(window.innerWidth, window.innerHeight * 0.7);
+        container.appendChild(renderer.domElement);
+
+        const labelRenderer = new THREE.CSS2DRenderer();
+        labelRenderer.setSize(window.innerWidth, window.innerHeight * 0.7);
+        labelRenderer.domElement.style.position = 'absolute';
+        labelRenderer.domElement.style.top = '0';
+        labelRenderer.domElement.style.pointerEvents = 'none';
+        container.appendChild(labelRenderer.domElement);
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.target.set(0, 0, 0);
+
+        // Colors
+        const colors = {
+            founder: 0xd4af37,
+            gen2: 0x4c6ef5,
+            gen3: 0x51cf66,
+            gen4: 0xff8787,
+            gen5: 0xa9e34b,
+            intermarriage: 0xff6b6b
+        };
+
+        // Genealogical Data Structure
+        // Y-axis represents generations: Founder (100), Gen2 (50), Gen3 (0), Gen4 (-50), Gen5 (-100)
+        const nodes = [
+            // Generation 1: Founder
+            { id: 'mayer_amschel', name: 'Mayer Amschel Rothschild', gen: 1, y: 100, x: 0, z: 0, role: 'Founder of the Dynasty (1743-1812)', notes: 'Started as a rare coin dealer in Frankfurt. Established the family banking network. Married Gudule Schnapper in 1770.' },
+            
+            // Generation 2: The Five Sons
+            { id: 'amschel_mayer', name: 'Amschel Mayer', gen: 2, y: 50, x: -60, z: 0, role: 'Frankfurt Branch', notes: 'Born 1773. Married Eva Hanau. Remained in Frankfurt to manage the original house.' },
+            { id: 'salomon_mayer', name: 'Salomon Mayer', gen: 2, y: 50, x: -30, z: 40, role: 'Vienna Branch', notes: 'Born 1774. Married Caroline Stern. Established the Vienna branch, gained intimate access to Prince Metternich.' },
+            { id: 'nathan_mayer', name: 'Nathan Mayer', gen: 2, y: 50, x: 0, z: 60, role: 'London Branch', notes: 'Born 1777. Married Hannah Levi (Barnet Cohen) in 1806. The most financially astute of the brothers, established N M Rothschild & Sons.' },
+            { id: 'karl_mayer', name: 'Karl Mayer', gen: 2, y: 50, x: 30, z: 40, role: 'Naples Branch', notes: 'Born 1788. Married Adelaide Herz. Managed the Naples branch, crucial for Papal and Italian state finances.' },
+            { id: 'james_mayer', name: 'Jacob (James) Mayer', gen: 2, y: 50, x: 60, z: 0, role: 'Paris Branch', notes: 'Born 1792. Married his niece Betty (daughter of Salomon). Established Rothschild Frères in Paris.' },
+
+            // Generation 3: Grandchildren (Selected prominent figures)
+            { id: 'anselm_salomon', name: 'Anselm Salomon', gen: 3, y: 0, x: -45, z: 20, role: 'Vienna/Frankfurt', notes: 'Son of Salomon. Married his cousin Charlotte (daughter of Nathan), exemplifying the family\'s strategy of endogamy.' },
+            { id: 'charlotte', name: 'Charlotte', gen: 3, y: 0, x: -15, z: 40, role: 'London/Vienna', notes: 'Daughter of Nathan Mayer. Married her cousin Anselm Salomon in 1824.' },
+            { id: 'lionel', name: 'Lionel de Rothschild', gen: 3, y: 0, x: 0, z: 80, role: 'London Branch Head', notes: 'Son of Nathan. Financed the British government\'s purchase of Suez Canal shares. First practicing Jew to sit in the House of Commons (1858).' },
+            { id: 'anthony', name: 'Anthony de Rothschild', gen: 3, y: 0, x: -20, z: 80, role: 'London Branch', notes: 'Son of Nathan. Married Louisa Montefiore (niece of Sir Moses Montefiore), another strategic family alliance.' },
+            { id: 'mayer_carl', name: 'Mayer Carl', gen: 3, y: 0, x: 20, z: 60, role: 'Frankfurt Branch', notes: 'Son of Karl. Married his cousin Louise, daughter of Mayer Amschel (son of Amschel Mayer).' },
+            { id: 'alphonse', name: 'Alphonse James', gen: 3, y: 0, x: 60, z: 20, role: 'Paris Branch Head', notes: 'Eldest son of James. Married his cousin Leonora (daughter of Lionel), continuing the intermarriage tradition.' },
+            { id: 'gustave', name: 'Gustave de Rothschild', gen: 3, y: 0, x: 80, z: 0, role: 'Paris Branch', notes: 'Son of James. Married Cécile Anspach.' },
+
+            // Generation 4: Great-Grandchildren
+            { id: 'edmond', name: 'Baron Edmond', gen: 4, y: -50, x: 50, z: 30, role: 'Paris Branch / Zionism', notes: 'Son of James. Known as "the Benefactor," he heavily funded early Zionist agricultural settlements in Palestine (Rishon LeZion, Zikhron Ya\'akov).' },
+            { id: 'edouard', name: 'Édouard Alphonse', gen: 4, y: -50, x: 70, z: 10, role: 'Paris Branch', notes: 'Son of Alphonse. Led the French house into the 20th century.' },
+            { id: 'nathaniel', name: 'Nathaniel (Natty)', gen: 4, y: -50, x: 0, z: 100, role: 'London Branch', notes: 'Son of Lionel. First Jewish peer to take his seat in the House of Lords (1885).' },
+            { id: 'ferdinand', name: 'Ferdinand', gen: 4, y: -50, x: -30, z: 10, role: 'Vienna Branch', notes: 'Son of Anselm Salomon. Expanded Austrian industrial investments, including railways and mining.' },
+
+            // Generation 5+: Contemporary / Modern Era
+            { id: 'victor', name: 'Victor Rothschild', gen: 5, y: -100, x: 0, z: 120, role: 'London Branch', notes: '3rd Baron Rothschild. Scientist, intelligence officer (MI5), and advisor to multiple Prime Ministers.' },
+            { id: 'edmond_adolphe', name: 'Edmond Adolphe', gen: 5, y: -100, x: 60, z: 40, role: 'Paris Branch', notes: 'Led the French banking operations post-WWII, restructured the family\'s wine and financial holdings.' },
+            { id: 'jacob_nathaniel', name: 'Jacob Nathaniel', gen: 5, y: -100, x: 80, z: 20, role: 'London Branch', notes: '4th Baron Rothschild. Financier and prominent figure in modern British Jewish life.' },
+            { id: 'david_rene', name: 'David René', gen: 5, y: -100, x: 70, z: 0, role: 'Paris Branch', notes: 'Chairman of Rothschild & Cie Banque, representing the contemporary French branch.' }
+        ];
+
+        // Connections (Parent-Child and Intermarriages)
+        const links = [
+            // Founder to Gen 2
+            { source: 'mayer_amschel', target: 'amschel_mayer', type: 'parent-child' },
+            { source: 'mayer_amschel', target: 'salomon_mayer', type: 'parent-child' },
+            { source: 'mayer_amschel', target: 'nathan_mayer', type: 'parent-child' },
+            { source: 'mayer_amschel', target: 'karl_mayer', type: 'parent-child' },
+            { source: 'mayer_amschel', target: 'james_mayer', type: 'parent-child' },
+
+            // Gen 2 to Gen 3
+            { source: 'salomon_mayer', target: 'anselm_salomon', type: 'parent-child' },
+            { source: 'nathan_mayer', target: 'charlotte', type: 'parent-child' },
+            { source: 'nathan_mayer', target: 'lionel', type: 'parent-child' },
+            { source: 'nathan_mayer', target: 'anthony', type: 'parent-child' },
+            { source: 'karl_mayer', target: 'mayer_carl', type: 'parent-child' },
+            { source: 'james_mayer', target: 'alphonse', type: 'parent-child' },
+            { source: 'james_mayer', target: 'gustave', type: 'parent-child' },
+
+            // Gen 3 to Gen 4
+            { source: 'james_mayer', target: 'edmond', type: 'parent-child' },
+            { source: 'alphonse', target: 'edouard', type: 'parent-child' },
+            { source: 'lionel', target: 'nathaniel', type: 'parent-child' },
+            { source: 'anselm_salomon', target: 'ferdinand', type: 'parent-child' },
+
+            // Gen 4 to Gen 5
+            { source: 'nathaniel', target: 'victor', type: 'parent-child' },
+            { source: 'edouard', target: 'edmond_adolphe', type: 'parent-child' },
+            { source: 'nathaniel', target: 'jacob_nathaniel', type: 'parent-child' },
+            { source: 'edmond_adolphe', target: 'david_rene', type: 'parent-child' },
+
+            // Intermarriages (The "renowned incest" / endogamy links)
+            { source: 'anselm_salomon', target: 'charlotte', type: 'intermarriage', label: 'Married (Cousins)' },
+            { source: 'alphonse', target: 'lionel', targetNote: 'Married Leonora (Lionel\'s daughter)', type: 'intermarriage', label: 'Married (Uncle/Niece by marriage)' },
+            { source: 'mayer_carl', target: 'amschel_mayer', targetNote: 'Married Louise (Amschel\'s daughter)', type: 'intermarriage', label: 'Married (Cousins)' },
+            { source: 'anthony', target: 'nathan_mayer', targetNote: 'Married Louisa Montefiore (Nathan\'s niece)', type: 'intermarriage', label: 'Married (Strategic Alliance)' },
+            { source: 'james_mayer', target: 'salomon_mayer', targetNote: 'Married Betty (Salomon\'s daughter)', type: 'intermarriage', label: 'Married (Uncle/Niece)' }
+        ];
+
+        const nodeMap = {};
+        nodes.forEach(n => nodeMap[n.id] = n);
+
+        // Create 3D Objects
+        const nodeObjects = [];
+        const lineObjects = [];
+        const labelObjects = [];
+
+        // Node Geometry
+        const sphereGeometry = new THREE.SphereGeometry(3, 32, 32);
+        
+        nodes.forEach(node => {
+            const color = colors[`gen${node.gen}`] || colors.gen5;
+            const material = new THREE.MeshPhongMaterial({ 
+                color: color, 
+                emissive: color,
+                emissiveIntensity: 0.2,
+                shininess: 100
+            });
+            
+            const mesh = new THREE.Mesh(sphereGeometry, material);
+            mesh.position.set(node.x, node.y, node.z);
+            mesh.userData = node;
+            scene.add(mesh);
+            nodeObjects.push(mesh);
+
+            // Add label
+            const div = document.createElement('div');
+            div.className = 'relationship-label';
+            div.textContent = node.name;
+            div.style.display = 'block';
+            const label = new THREE.CSS2DObject(div);
+            label.position.set(0, 5, 0);
+            mesh.add(label);
+            labelObjects.push(label);
+        });
+
+        // Create Links
+        links.forEach(link => {
+            const sourceNode = nodeMap[link.source];
+            const targetNode = nodeMap[link.target];
+            
+            if (sourceNode && targetNode) {
+                const points = [];
+                points.push(new THREE.Vector3(sourceNode.x, sourceNode.y, sourceNode.z));
+                points.push(new THREE.Vector3(targetNode.x, targetNode.y, targetNode.z));
+                
+                const geometry = new THREE.BufferGeometry().setFromPoints(points);
+                const isIntermarriage = link.type === 'intermarriage';
+                const material = new THREE.LineBasicMaterial({ 
+                    color: isIntermarriage ? colors.intermarriage : 0x555555,
+                    linewidth: isIntermarriage ? 3 : 1
+                });
+                
+                const line = new THREE.Line(geometry, material);
+                scene.add(line);
+                lineObjects.push(line);
+
+                // Add relationship label for intermarriages
+                if (isIntermarriage && link.label) {
+                    const midX = (sourceNode.x + targetNode.x) / 2;
+                    const midY = (sourceNode.y + targetNode.y) / 2;
+                    const midZ = (sourceNode.z + targetNode.z) / 2;
+                    
+                    const div = document.createElement('div');
+                    div.className = 'relationship-label';
+                    div.textContent = link.label;
+                    div.style.display = 'block';
+                    div.style.borderColor = '#ff6b6b';
+                    div.style.color = '#ff6b6b';
+                    
+                    const label = new THREE.CSS2DObject(div);
+                    label.position.set(midX, midY + 2, midZ);
+                    scene.add(label);
+                    labelObjects.push(label);
+                }
+            }
+        });
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+        scene.add(ambientLight);
+
+        const pointLight = new THREE.PointLight(0xffffff, 1);
+        pointLight.position.set(50, 150, 100);
+        scene.add(pointLight);
+
+        const pointLight2 = new THREE.PointLight(0xd4af37, 0.5);
+        pointLight2.position.set(-50, 100, -50);
+        scene.add(pointLight2);
+
+        // Interaction
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        let selectedNode = null;
+        let autoRotate = false;
+
+        function onMouseClick(event) {
+            const rect = renderer.domElement.getBoundingClientRect();
+            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(nodeObjects);
+
+            if (intersects.length > 0) {
+                const object = intersects[0].object;
+                selectNode(object.userData);
+            } else {
+                deselectNode();
+            }
+        }
+
+        function selectNode(nodeData) {
+            selectedNode = nodeData;
+            
+            // Highlight
+            nodeObjects.forEach(obj => {
+                obj.material.emissiveIntensity = obj.userData.id === nodeData.id ? 0.8 : 0.2;
+                obj.scale.set(obj.userData.id === nodeData.id ? 1.5 : 1, obj.userData.id === nodeData.id ? 1.5 : 1, obj.userData.id === nodeData.id ? 1.5 : 1);
+            });
+
+            // Update notes panel
+            const notesContent = document.getElementById('notes-content');
+            const headshotContainer = document.getElementById('headshot-container');
+            
+            let connectionsHtml = '';
+            links.forEach(link => {
+                if (link.source === nodeData.id || link.target === nodeData.id) {
+                    const otherId = link.source === nodeData.id ? link.target : link.source;
+                    const otherNode = nodeMap[otherId];
+                    const relation = link.source === nodeData.id ? 'Parent/Alliance to' : 'Child/Alliance from';
+                    const typeLabel = link.type === 'intermarriage' ? '💍 Intermarriage' : '👶 Descendant/Ancestor';
+                    
+                    connectionsHtml += `
+                        <div class="connection">
+                            <strong>${typeLabel}:</strong> 
+                            <span class="node-link" onclick="focusNode('${otherId}')">${otherNode.name}</span><br>
+                            <small>${relation}</small>
+                            ${link.targetNote ? `<br><small style="color:#ff6b6b">${link.targetNote}</small>` : ''}
+                        </div>
+                    `;
+                }
+            });
+
+            notesContent.innerHTML = `
+                <h2>${nodeData.name}</h2>
+                <p><strong>Generation:</strong> ${nodeData.gen === 1 ? 'Founder' : nodeData.gen === 2 ? 'The Five Sons' : `Generation ${nodeData.gen}`}</p>
+                <p><strong>Role/Branch:</strong> ${nodeData.role}</p>
+                <p>${nodeData.notes}</p>
+                <h3 style="margin-top: 15px; color: #d4af37;">Family Connections</h3>
+                ${connectionsHtml || '<p>No direct connections mapped.</p>'}
+            `;
+            
+            headshotContainer.style.display = 'block';
+            headshotContainer.innerHTML = `
+                <div class="headshot-caption">${nodeData.name}</div>
+                <img src="images/placeholder.jpg" class="headshot-img" alt="${nodeData.name}" onclick="openImageModal(this.src)">
+                <small style="color:#888; font-size:0.6em; display:block; text-align:center;">(Add actual images to /images/)</small>
+            `;
+        }
+
+        function deselectNode() {
+            selectedNode = null;
+            nodeObjects.forEach(obj => {
+                obj.material.emissiveIntensity = 0.2;
+                obj.scale.set(1, 1, 1);
+            });
+            document.getElementById('notes-content').innerHTML = `
+                <h2>Family Member Information</h2>
+                <p>Click on a node to see detailed genealogical information and connections. Click empty space to deselect.</p>
+            `;
+            document.getElementById('headshot-container').style.display = 'none';
+        }
+
+        function focusNode(id) {
+            const node = nodeMap[id];
+            if (node) {
+                // Smooth camera transition could be added here
+                controls.target.set(node.x, node.y, node.z);
+                selectNode(node);
+            }
+        }
+
+        window.focusNode = focusNode;
+
+        container.addEventListener('click', onMouseClick);
+
+        // Modal functions
+        window.openImageModal = function(src) {
+            document.getElementById('modal-image').src = src;
+            document.getElementById('image-modal').classList.add('active');
+        }
+
+        window.closeImageModal = function() {
+            document.getElementById('image-modal').classList.remove('active');
+        }
+
+        window.resetCamera = function() {
+            camera.position.set(0, 20, 200);
+            controls.target.set(0, 0, 0);
+            controls.update();
+        }
+
+        window.toggleRotation = function() {
+            autoRotate = !autoRotate;
+            controls.autoRotate = autoRotate;
+        }
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+            labelRenderer.render(scene, camera);
+        }
+
+        // Handle Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / (window.innerHeight * 0.7);
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight * 0.7);
+            labelRenderer.setSize(window.innerWidth, window.innerHeight * 0.7);
+        });
+
+        animate();
+    </script>
+</body>
+</html>
