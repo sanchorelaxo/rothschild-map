@@ -393,6 +393,32 @@
         const nodeMap = {};
         nodes.forEach(n => nodeMap[n.id] = n);
 
+
+        const headshotImages = {
+            'mayer_amschel': 'mayer_amschel_rothschild.jpg',
+            'amschel_mayer': 'placeholder.jpg',
+            'salomon_mayer': 'salomon_mayer_von_rothschild.jpg',
+            'nathan_mayer': 'nathan_mayer_rothschild.jpg',
+            'karl_mayer': 'carl_mayer_von_rothschild.jpg',
+            'james_mayer': 'james_mayer_de_rothschild.jpg',
+            'anselm_salomon': 'placeholder.jpg',
+            'charlotte': 'charlotte_von_rothschild.jpg',
+            'lionel': 'lionel_de_rothschild.jpg',
+            'anthony': 'placeholder.jpg',
+            'mayer_carl': 'mayer_carl_von_rothschild.jpg',
+            'alphonse': 'alphonse_james_de_rothschild.jpg',
+            'gustave': 'gustave_de_rothschild.jpg',
+            'edmond': 'edmond_james_de_rothschild.jpg',
+            'edouard': 'édouard_alphonse_james_de_rothschild.jpg',
+            'nathaniel': 'nathaniel_de_rothschild.jpg',
+            'ferdinand': 'ferdinand_de_rothschild.jpg',
+            'victor': 'placeholder.jpg',
+            'edmond_adolphe': 'edmond_adolphe_de_rothschild.jpg',
+            'jacob_nathaniel': 'jacob_rothschild_4th_baron_rothschild.jpg',
+            'david_rene': 'david_rené_de_rothschild.jpg'
+        };
+
+
         // Create 3D Objects
         const nodeObjects = [];
         const lineObjects = [];
@@ -545,10 +571,10 @@
             `;
             
             headshotContainer.style.display = 'block';
+            const imgUrl = headshotImages[nodeData.id] || 'placeholder.jpg';
             headshotContainer.innerHTML = `
                 <div class="headshot-caption">${nodeData.name}</div>
-                <img src="images/placeholder.jpg" class="headshot-img" alt="${nodeData.name}" onclick="openImageModal(this.src)">
-                <small style="color:#888; font-size:0.6em; display:block; text-align:center;">(Add actual images to /images/)</small>
+                <img src="images/${imgUrl}" class="headshot-img" alt="${nodeData.name}" onclick="openImageModal(this.src)">
             `;
         }
 
