@@ -404,7 +404,27 @@ const nodes = [
         "x": -15,
         "z": 40,
         "role": "London/Vienna",
-        "notes": "(1807\u20131859) Daughter of Nathan Mayer. Married her cousin Anselm Salomon von Rothschild in 1826."
+        "notes": "(1807–1859) Daughter of Nathan Mayer. Married her cousin Anselm Salomon von Rothschild in 1826."
+    },
+    {
+        "id": "charlotte_carl",
+        "name": "Charlotte de Rothschild",
+        "gen": 3,
+        "y": 0,
+        "x": 10,
+        "z": 70,
+        "role": "London/Naples",
+        "notes": "(1819–1884) Daughter of Carl Mayer von Rothschild. Married her first cousin Lionel de Rothschild in 1836."
+    },
+    {
+        "id": "charlotte_james",
+        "name": "Charlotte de Rothschild",
+        "gen": 3,
+        "y": 0,
+        "x": 50,
+        "z": -10,
+        "role": "Paris/London",
+        "notes": "(1825–1899) Daughter of James Mayer de Rothschild. Married her first cousin Nathaniel de Rothschild in 1842."
     },
     {
         "id": "lionel",
@@ -514,7 +534,17 @@ const nodes = [
         "x": 0,
         "z": 100,
         "role": "London Branch Head",
-        "notes": "(1840\u20131915) Son of Lionel. Married Emma Louise von Rothschild (1867). First Jewish peer to take his seat in the House of Lords (1885)."
+        "notes": "(1840–1915) Son of Lionel. Married Emma Louise von Rothschild (1867). First Jewish peer to take his seat in the House of Lords (1885)."
+    },
+    {
+        "id": "emma_louise",
+        "name": "Emma Louise von Rothschild",
+        "gen": 4,
+        "y": -50,
+        "x": -10,
+        "z": 110,
+        "role": "London Branch",
+        "notes": "(1844–1935) Daughter of Mayer Carl von Rothschild. Married her double first cousin, Nathan Mayer Rothschild (1st Baron), in 1867."
     },
     {
         "id": "alfred",
@@ -874,10 +904,17 @@ const links = [
     },
     {
         "source": "lionel",
-        "target": "charlotte_gen3",
+        "target": "charlotte_carl",
         "type": "intermarriage",
         "label": "Married (First Cousins)",
-        "targetNote": "Lionel (London) married Charlotte (Naples)"
+        "targetNote": "Lionel (London) married Charlotte (Naples, Carl's daughter)"
+    },
+    {
+        "source": "nathaniel_gen3",
+        "target": "charlotte_james",
+        "type": "intermarriage",
+        "label": "Married (First Cousins)",
+        "targetNote": "Nathaniel (London) married Charlotte (Paris, James's daughter)"
     },
     {
         "source": "alphonse",
@@ -927,6 +964,13 @@ const links = [
         "type": "intermarriage",
         "label": "Married (First Cousins)",
         "targetNote": "Ferdinand (Vienna/England) married Evelina (London, Lionel's daughter)"
+    },
+    {
+        "source": "nathaniel_gen4",
+        "target": "emma_louise",
+        "type": "intermarriage",
+        "label": "Married (Double First Cousins)",
+        "targetNote": "Nathan Mayer (1st Baron) married Emma Louise (Mayer Carl's daughter), sharing both sets of grandparents."
     }
 ];
 
