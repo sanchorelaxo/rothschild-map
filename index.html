@@ -1161,6 +1161,10 @@ const headshotImages = {
                 if (link.source === nodeData.id || link.target === nodeData.id) {
                     const otherId = link.source === nodeData.id ? link.target : link.source;
                     const otherNode = nodeMap[otherId];
+                    
+                    // Skip if the linked node is a placeholder or doesn't exist in the nodes array
+                    if (!otherNode) return;
+                    
                     const relation = link.source === nodeData.id ? 'Parent/Alliance to' : 'Child/Alliance from';
                     const typeLabel = link.type === 'intermarriage' ? '💍 Intermarriage' : '👶 Descendant/Ancestor';
                     
